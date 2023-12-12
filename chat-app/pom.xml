@@ -25,6 +25,16 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+		<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-messaging</artifactId>
+    <version>5.3.3</version> <!-- Stellen Sie sicher, dass Sie die richtige Version verwenden -->
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-websocket</artifactId>
+    <version>2.6.3</version> <!-- oder die von Ihnen verwendete Spring Boot-Version -->
+</dependency>
 
 		<dependency>
 			<groupId>org.postgresql</groupId>
