@@ -18,7 +18,7 @@ export class AppComponent implements OnInit {
   constructor(private chatService: ChatService) {}
 
   ngOnInit() {
-    this.loadMessages();
+    // this.loadMessages();
   }
 
   loadMessages() {

@@ -2,3 +2,6 @@
 <router-outlet></router-outlet>
 
 bonjour
+<form (submit)="onSendMessage(message.value)">
+    <input #message placeholder="Send message">
+ </form>
