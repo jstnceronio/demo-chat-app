@@ -1,4 +1,7 @@
+import 'package:chat_app_mobile_client/view_chat.dart';
 import 'package:flutter/material.dart';
+import 'package:web_socket_channel/io.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 void main() {
   runApp(const MyApp());
@@ -36,7 +39,7 @@ class MyWidget extends StatelessWidget {
               child: TextFormField(
                 controller: _controller,
                 decoration: InputDecoration(
-                  labelText: 'Benutzernamen eingeben',
+                  labelText: 'Benutzername eingeben',
                   fillColor: Colors.white,
                   filled: true,
                   border: OutlineInputBorder(
@@ -66,7 +69,18 @@ class MyWidget extends StatelessWidget {
                 ),
                 onPressed: () {
                   String textValue = _controller.text;
-                  print(textValue);
+
+                  final WebSocketChannel websocket = IOWebSocketChannel.connect(
+                      "ws://localhost:8080/websocket",
+                      headers: {
+                        'username': textValue,
+                      });
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ChatScreen(websocket)),
+                  );
                 },
                 child: const Text(
                   'Verbinden',
