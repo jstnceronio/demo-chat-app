@@ -1,3 +1,4 @@
+import 'package:chat_app_mobile_client/app_config.dart';
 import 'package:chat_app_mobile_client/view_chat.dart';
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/io.dart';
@@ -49,9 +50,6 @@ class MyWidget extends StatelessWidget {
                   contentPadding:
                       const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                 ),
-                onSaved: (newValue) {
-                  print(newValue);
-                },
               ),
             ),
             const SizedBox(height: 20),
@@ -70,8 +68,12 @@ class MyWidget extends StatelessWidget {
                 onPressed: () {
                   String textValue = _controller.text;
 
+                  if (textValue.isEmpty) {
+                    textValue = "Anonym";
+                  }
+
                   final WebSocketChannel websocket = IOWebSocketChannel.connect(
-                      "ws://localhost:8080/websocket",
+                      AppConfig.websocketUrl,
                       headers: {
                         'username': textValue,
                       });
@@ -79,7 +81,10 @@ class MyWidget extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => ChatScreen(websocket)),
+                        builder: (context) => ChatScreen(
+                              ownUsername: textValue,
+                              websocket: websocket,
+                            )),
                   );
                 },
                 child: const Text(

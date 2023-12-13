@@ -9,15 +9,8 @@ class Message {
   const Message({required this.username, required this.message});
 
   factory Message.fromJson(String s) {
-    String test =
-        s.replaceAll("\'", "\"").replaceAll("{", "\'{").replaceAll("}", "}\'");
-    print(test);
-    String string = '{"username":"jg", "message":"dsf"}';
-
-    print(string);
-    Map<String, dynamic> user = jsonDecode(test);
-    print(user['username']);
-    // print(json.decode(s.replaceAll("\'", "\"")));
-    return Message(username: 'test', message: 'test');
+    Map<String, dynamic> jsonObject = jsonDecode(s);
+    return Message(
+        username: jsonObject['username'], message: jsonObject['message']);
   }
 }
