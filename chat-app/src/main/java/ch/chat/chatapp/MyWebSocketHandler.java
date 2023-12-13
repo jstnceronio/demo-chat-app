@@ -25,7 +25,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 
         // Durchlaufen aller Sessions und Senden der Nachricht an jede Session
         for (WebSocketSession webSocketSession : sessions) {
-            if (webSocketSession.isOpen() & (webSocketSession != session)) {
+            if (webSocketSession.isOpen()) {
                 webSocketSession.sendMessage(new TextMessage(returnMessage));
             }
         }
