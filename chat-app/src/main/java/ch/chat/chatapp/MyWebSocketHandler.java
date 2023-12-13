@@ -20,10 +20,13 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
             throws InterruptedException, IOException {
         System.out.println(message + " " + TimeStampHandler.getCurrentTimestamp());
 
+        String username = session.getHandshakeHeaders().getFirst("Username");
+        String returnMessage = String.format("{'username':'%s', 'message':'%s'}", username, message.getPayload());
+
         // Durchlaufen aller Sessions und Senden der Nachricht an jede Session
         for (WebSocketSession webSocketSession : sessions) {
             if (webSocketSession.isOpen() & (webSocketSession != session)) {
-                webSocketSession.sendMessage(message);
+                webSocketSession.sendMessage(new TextMessage(returnMessage));
             }
         }
     }
