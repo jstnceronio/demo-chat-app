@@ -21,7 +21,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
         System.out.println(message + " " + TimeStampHandler.getCurrentTimestamp());
 
         String username = session.getHandshakeHeaders().getFirst("Username");
-        String returnMessage = String.format("\"username\":\"%s\", \"message\":\"%s\"}", username,
+        String returnMessage = String.format("{\"username\":\"%s\", \"message\":\"%s\"}", username,
                 message.getPayload());
 
         // Durchlaufen aller Sessions und Senden der Nachricht an jede Session
@@ -43,7 +43,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 
         // Erstellen der Willkommensnachricht
         String welcomeMessage = username + " ist jetzt im Chat.";
-        String returnMessage = String.format("\"username\":\"System\", \"message\":\"%s\"}", welcomeMessage);
+        String returnMessage = String.format("{\"username\":\"System\", \"message\":\"%s\"}", welcomeMessage);
 
         // Senden der Willkommensnachricht an alle verbundenen Sessions
         for (WebSocketSession webSocketSession : sessions) {
@@ -63,7 +63,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 
         // Erstellen der Quit Nachricht
         String quitMessage = username + " hat den Chat verlassen.";
-        String returnMessage = String.format("\"username\":\"System\", \"message\":\"%s\"}", quitMessage);
+        String returnMessage = String.format("{\"username\":\"System\", \"message\":\"%s\"}", quitMessage);
 
         // Senden der Quit Nachricht an alle verbundenen Sessions
         for (WebSocketSession webSocketSession : sessions) {
