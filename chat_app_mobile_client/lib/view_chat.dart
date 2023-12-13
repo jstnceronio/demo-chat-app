@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:chat_app_mobile_client/service/message.dart';
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -23,7 +26,18 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     widget.websocket.stream.listen(
       (message) {
-        print(message);
+        String message2 = message.toString().replaceAll("\'", "\"");
+        print(message2);
+        String test = "{\"username\":\"test\", \"message\":\"test\"}";
+        print(test);
+
+        if (test == message2) {
+          print('gleich');
+        }
+        var test2 = (jsonDecode(message2));
+        print(test2['username']);
+
+        //var test = Message.fromJson(message);
       },
       onDone: () {
         print('done');
@@ -40,14 +54,8 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
       body: Column(
         children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: messages.length,
-              itemBuilder: (context, index) {
-                return ChatMessageTile(message: messages[index]);
-              },
-            ),
-          ),
+          /*  Expanded(
+              child: ),  */
           Container(
             padding:
                 const EdgeInsets.only(left: 8, right: 8, bottom: 30, top: 15),
@@ -92,17 +100,17 @@ class _ChatScreenState extends State<ChatScreen> {
 class ChatMessageTile extends StatelessWidget {
   final String message;
 
-  ChatMessageTile({required this.message});
+  const ChatMessageTile({super.key, required this.message});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       child: Material(
         elevation: 5,
         borderRadius: BorderRadius.circular(10),
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
           child: Text(message),
         ),
       ),
