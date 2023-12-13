@@ -5,6 +5,8 @@ import ch.chat.chatapp.model.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class MessageService {
 
@@ -19,6 +21,11 @@ public class MessageService {
         // Here, you can add any business logic before saving the message
         return messageRepository.save(message);
     }
+
+    public List<Message> findAll(){
+        return messageRepository.findAll();
+    }
+
 
     // Additional methods for other business logic (e.g., retrieving messages)
 }
