@@ -21,7 +21,8 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
         System.out.println(message + " " + TimeStampHandler.getCurrentTimestamp());
 
         String username = session.getHandshakeHeaders().getFirst("Username");
-        String returnMessage = String.format("{'username':'%s', 'message':'%s'}", username, message.getPayload());
+        String returnMessage = String.format("\"username\":\"%s\", \"message\":\"%s\"}", username,
+                message.getPayload());
 
         // Durchlaufen aller Sessions und Senden der Nachricht an jede Session
         for (WebSocketSession webSocketSession : sessions) {
@@ -41,12 +42,13 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
         sessions.add(session);
 
         // Erstellen der Willkommensnachricht
-        TextMessage welcomeMessage = new TextMessage(username + " ist jetzt im Chat.");
+        String welcomeMessage = username + " ist jetzt im Chat.";
+        String returnMessage = String.format("\"username\":\"System\", \"message\":\"%s\"}", welcomeMessage);
 
         // Senden der Willkommensnachricht an alle verbundenen Sessions
         for (WebSocketSession webSocketSession : sessions) {
             if (webSocketSession.isOpen()) {
-                webSocketSession.sendMessage(welcomeMessage);
+                webSocketSession.sendMessage(new TextMessage(returnMessage));
             }
         }
     }
@@ -60,12 +62,13 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
         System.out.println(username + " hat den Chat verlassen. " + TimeStampHandler.getCurrentTimestamp());
 
         // Erstellen der Quit Nachricht
-        TextMessage quitMessage = new TextMessage(username + " hat den Chat verlassen.");
+        String quitMessage = username + " hat den Chat verlassen.";
+        String returnMessage = String.format("\"username\":\"System\", \"message\":\"%s\"}", quitMessage);
 
         // Senden der Quit Nachricht an alle verbundenen Sessions
         for (WebSocketSession webSocketSession : sessions) {
             if (webSocketSession.isOpen() & (webSocketSession != session)) {
-                webSocketSession.sendMessage(quitMessage);
+                webSocketSession.sendMessage(new TextMessage(returnMessage));
             }
         }
 
