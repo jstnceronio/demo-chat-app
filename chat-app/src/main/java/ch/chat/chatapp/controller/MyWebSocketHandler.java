@@ -1,5 +1,8 @@
-package ch.chat.chatapp;
+package ch.chat.chatapp.controller;
 
+import ch.chat.chatapp.utils.TimeStampHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -13,12 +16,15 @@ import java.util.List;
 
 public class MyWebSocketHandler extends TextWebSocketHandler {
 
+    private static Logger logger = LoggerFactory.getLogger(MessageController.class);
+
     List<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
 
     @Override
     public void handleTextMessage(WebSocketSession session, TextMessage message)
-            throws InterruptedException, IOException {
-        System.out.println(message + " " + TimeStampHandler.getCurrentTimestamp());
+            throws IOException {
+
+        logger.info("Received: " + TimeStampHandler.getCurrentTimestamp());
 
         String username = session.getHandshakeHeaders().getFirst("Username");
         String returnMessage = String.format("{\"username\":\"%s\", \"message\":\"%s\"}", username,
@@ -34,18 +40,18 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws InterruptedException, IOException {
-        // username rauslesen
+        // read the username
         String username = session.getHandshakeHeaders().getFirst("Username");
-        System.out.println(username + " ist jetzt im Chat. " + TimeStampHandler.getCurrentTimestamp());
+
+        logger.info(username + " entered the chat @ " + TimeStampHandler.getCurrentTimestamp());
 
         // broadcast
         sessions.add(session);
 
-        // Erstellen der Willkommensnachricht
         String welcomeMessage = username + " ist jetzt im Chat.";
         String returnMessage = String.format("{\"username\":\"System\", \"message\":\"%s\"}", welcomeMessage);
 
-        // Senden der Willkommensnachricht an alle verbundenen Sessions
+        // Send welcome message to all connected sessions
         for (WebSocketSession webSocketSession : sessions) {
             if (webSocketSession.isOpen()) {
                 webSocketSession.sendMessage(new TextMessage(returnMessage));
@@ -55,24 +61,23 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status)
-            throws InterruptedException, IOException {
+            throws IOException {
 
-        // username rauslesen
+        // Get username
         String username = session.getHandshakeHeaders().getFirst("Username");
-        System.out.println(username + " hat den Chat verlassen. " + TimeStampHandler.getCurrentTimestamp());
+        logger.info(username + " hast left the chat @ " + TimeStampHandler.getCurrentTimestamp());
 
-        // Erstellen der Quit Nachricht
         String quitMessage = username + " hat den Chat verlassen.";
         String returnMessage = String.format("{\"username\":\"System\", \"message\":\"%s\"}", quitMessage);
 
-        // Senden der Quit Nachricht an alle verbundenen Sessions
+        // Send quit message to all connected sessions
         for (WebSocketSession webSocketSession : sessions) {
             if (webSocketSession.isOpen() & (webSocketSession != session)) {
                 webSocketSession.sendMessage(new TextMessage(returnMessage));
             }
         }
 
-        // Entfernen der Session aus der Liste
+        // Remove session from session list
         sessions.remove(session);
 
     }
