@@ -1,7 +1,16 @@
 
 <router-outlet></router-outlet>
 
-bonjour
+<div class="text-xl font-bold">BeFriendly.</div>
+
+
 <form (submit)="onSendMessage(message.value)">
     <input #message placeholder="Send message">
  </form>
+
+ @for (message of messages; track message.id) {
+    {{ message.content }}
+  } @empty {
+    Empty list of users
+  }
+  
