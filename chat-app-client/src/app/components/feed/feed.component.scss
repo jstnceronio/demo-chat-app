@@ -1,0 +1,16 @@
+.enter-msg {
+    @apply bg-gray-200 appearance-none border-2 
+            border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none 
+            focus:bg-white focus:border-purple-500
+}
+.message {
+    @apply bg-purple-100 py-2 px-4 rounded mt-4;
+
+    .msg-content {
+        @apply font-bold;
+    }
+
+    .msg-sender {
+        @apply text-gray-700 text-sm;
+    }
+}

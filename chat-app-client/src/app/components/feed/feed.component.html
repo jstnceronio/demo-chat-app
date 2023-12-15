@@ -1,0 +1,26 @@
+<div class="feed-wrapper">
+    <form (submit)="onSendMessage(message.value)">
+
+        <div class="input-wrapper w-64 mt-8">
+            <input class="enter-msg" 
+             #message type="text" placeholder="Send message">
+        </div>
+    </form>
+
+    <div class="message-feed mt-8">
+        <div *ngFor="let message of messages">
+            <div class="message">
+                <div class="msg-sender">
+                    {{ message.sender }}
+                </div>
+                <div class="msg-content">
+                    {{ message.content }}
+                </div>
+            </div>
+        </div>
+        <div *ngIf="messages.length === 0">
+              No messages found
+        </div>
+    </div>
+</div>
+
