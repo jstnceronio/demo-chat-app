@@ -1,6 +1,6 @@
 package ch.chat.chatapp.config;
 
-import ch.chat.chatapp.controller.MyWebSocketHandler;
+import ch.chat.chatapp.controller.WebSocketHandler;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
@@ -15,7 +15,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
         registry.addHandler(myHandler(), "/websocket");
     }
 
-    public MyWebSocketHandler myHandler() {
-        return new MyWebSocketHandler();
+    public WebSocketHandler myHandler() {
+        return new WebSocketHandler();
     }
 }
