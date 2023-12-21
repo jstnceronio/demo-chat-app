@@ -29,7 +29,7 @@ export class FeedComponent implements OnInit {
   constructor(private chatService: ChatService) {}
 
   ngOnInit() {
-    // this.loadMessages();
+    this.loadMessages();
   }
 
   loadMessages() {

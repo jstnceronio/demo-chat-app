@@ -1,8 +1,11 @@
 package ch.chat.chatapp.controller;
 
+import ch.chat.chatapp.model.Message;
+import ch.chat.chatapp.service.MessageService;
 import ch.chat.chatapp.utils.TimeStampHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -14,17 +17,28 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 import java.io.IOException;
 import java.util.List;
 
+@Controller
 public class MyWebSocketHandler extends TextWebSocketHandler {
 
     private static Logger logger = LoggerFactory.getLogger(MessageController.class);
 
+
+    private final MessageService messageService;
+
     List<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
+
+    public MyWebSocketHandler(MessageService messageService) {
+        this.messageService = messageService;
+    }
 
     @Override
     public void handleTextMessage(WebSocketSession session, TextMessage message)
             throws IOException {
 
         logger.info("Received: " + TimeStampHandler.getCurrentTimestamp());
+        Message newMessage = new Message();
+        newMessage.setContent(message.getPayload());
+        messageService.saveMessage(newMessage);
 
         String username = session.getHandshakeHeaders().getFirst("Username");
         String returnMessage = String.format("{\"username\":\"%s\", \"message\":\"%s\"}", username,
