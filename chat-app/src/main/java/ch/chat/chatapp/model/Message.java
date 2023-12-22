@@ -9,15 +9,10 @@ import lombok.Setter;
 
 @Data
 @Entity
-@Setter
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String content;
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
+    private String sender;
 }

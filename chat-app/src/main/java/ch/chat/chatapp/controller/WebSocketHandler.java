@@ -34,12 +34,14 @@ public class WebSocketHandler extends TextWebSocketHandler {
     public void handleTextMessage(WebSocketSession session, TextMessage message)
             throws IOException {
 
+        String username = session.getHandshakeHeaders().getFirst("username");
+
         logger.info("Received: " + TimeStampHandler.getCurrentTimestamp());
         Message newMessage = new Message();
         newMessage.setContent(message.getPayload());
+        newMessage.setSender(username);
         messageService.saveMessage(newMessage);
 
-        String username = session.getHandshakeHeaders().getFirst("Username");
         String returnMessage = String.format("{\"username\":\"%s\", \"message\":\"%s\"}", username,
                 message.getPayload());
 
