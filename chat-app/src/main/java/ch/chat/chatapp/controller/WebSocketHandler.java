@@ -26,7 +26,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
     List<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
 
-    public MyWebSocketHandler(MessageService messageService) {
+    public WebSocketHandler(MessageService messageService) {
         this.messageService = messageService;
     }
 
