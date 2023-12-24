@@ -4,6 +4,7 @@ import { ChatService } from '../../service/chat.service';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
+import { SocketService } from '../../service/socket.service';
 
 @Component({
   selector: 'app-feed',
@@ -13,34 +14,34 @@ import { HttpClientModule } from '@angular/common/http';
   styleUrl: './feed.component.scss'
 })
 export class FeedComponent implements OnInit {
+  message: Message = { id: 0, content: '', sender: '' };
+
   messages: Message[] = [
-    {
-      id: 0,
-      content: "Hi", 
-      sender: "Aaron"
-    },
-    {
-      id: 1,
-      content: "Hey, how's it going?", 
-      sender: "Lukas"
-    }
+    { id: 0, content: '', sender: '' }
   ];
 
-  constructor(private chatService: ChatService) {}
+  constructor(private chatService: ChatService, private socketService: SocketService) {}
 
   ngOnInit() {
     this.loadMessages();
   }
 
   loadMessages() {
+    /*
     this.chatService.getMessages().subscribe(data => {
       this.messages = data;
-    }, error => console.error(error));
+    }, error => console.error(error)); */
+    this.chatService.getMessages().subscribe((message: any) => {
+      this.messages.push(message);
+    });
   }
 
   onSendMessage(newMessage: string) {
+    /*
     this.chatService.sendMessage({ content: newMessage }).subscribe(() => {
       this.loadMessages(); // Reload messages after sending
-    });
+    }); */
+    this.chatService.sendMessage(this.message);
+    this.message = { id: 0, content: '', sender: '' };
   }
 }
