@@ -39,7 +39,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
         logger.info("Received: " + TimeStampHandler.getCurrentTimestamp());
         Message newMessage = new Message();
         newMessage.setContent(message.getPayload());
-        newMessage.setSender(username);
+        //  newMessage.setSender(username);
         messageService.saveMessage(newMessage);
 
         String returnMessage = String.format("{\"username\":\"%s\", \"message\":\"%s\"}", username,
