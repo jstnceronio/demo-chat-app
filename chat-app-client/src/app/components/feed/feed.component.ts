@@ -31,7 +31,6 @@ export class FeedComponent implements OnInit, OnDestroy {
   connect(): void {
     this.webSocketService.connect('ws://localhost:8080/websocket', this.username);
     this.webSocketService.messages.subscribe((message) => {
-      console.log(message)
       this.messages.push(message);
     });
   }

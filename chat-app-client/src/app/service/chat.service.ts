@@ -22,7 +22,8 @@ export class ChatService {
 
     this.webSocket.subscribe(
       (msg) => {
-        const messageObj: Message = JSON.parse(msg);
+        console.log(msg);
+        const messageObj = JSON.parse(msg);
         console.log('Received message:', messageObj);
         this.messageSubject.next(messageObj);
       },

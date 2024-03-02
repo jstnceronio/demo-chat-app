@@ -23,7 +23,6 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
     private static Logger logger = LoggerFactory.getLogger(MessageController.class);
 
-
     private final MessageService messageService;
 
     List<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
@@ -43,16 +42,19 @@ public class WebSocketHandler extends TextWebSocketHandler {
                      session.getUri()
              ).getQuery().split("username=")[1];
         }
-        newMessage.setContent(message.getPayload());
+        newMessage.setContent(message
+                .getPayload()
+                .replace("\"", "")
+        );
         newMessage.setSender(username);
 
-        logger.info("Received: " + message.getPayload());
+        logger.info("Received: " + newMessage.getContent());
 
         messageService.saveMessage(newMessage);
 
         String returnMessage = String.format("{\"username\":\"%s\", \"message\":\"%s\"}",
                 newMessage.getSender(),
-                message.getPayload());
+                newMessage.getContent());
 
         session.sendMessage(new TextMessage(returnMessage));
 
