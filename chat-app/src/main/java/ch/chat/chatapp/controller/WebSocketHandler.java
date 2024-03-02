@@ -3,11 +3,13 @@ package ch.chat.chatapp.controller;
 import ch.chat.chatapp.model.Message;
 import ch.chat.chatapp.service.MessageService;
 import ch.chat.chatapp.utils.TimeStampHandler;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.socket.WebSocketSession;
 
+import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.springframework.web.socket.CloseStatus;
@@ -34,20 +36,28 @@ public class WebSocketHandler extends TextWebSocketHandler {
     public void handleTextMessage(WebSocketSession session, TextMessage message)
             throws IOException {
 
-        String username = session.getHandshakeHeaders().getFirst("username");
-
-        logger.info("Received: " + TimeStampHandler.getCurrentTimestamp());
         Message newMessage = new Message();
+        String username = session.getHandshakeHeaders().getFirst("username");
+        if (username == null) {
+             username = Objects.requireNonNull(
+                     session.getUri()
+             ).getQuery().split("username=")[1];
+        }
         newMessage.setContent(message.getPayload());
         newMessage.setSender(username);
+
+        logger.info("Received: " + message.getPayload());
+
         messageService.saveMessage(newMessage);
 
-        String returnMessage = String.format("{\"username\":\"%s\", \"message\":\"%s\"}", username,
+        String returnMessage = String.format("{\"username\":\"%s\", \"message\":\"%s\"}",
+                newMessage.getSender(),
                 message.getPayload());
 
-        // Durchlaufen aller Sessions und Senden der Nachricht an jede Session
+        session.sendMessage(new TextMessage(returnMessage));
+
         for (WebSocketSession webSocketSession : sessions) {
-            if (webSocketSession.isOpen()) {
+            if (webSocketSession.isOpen() && webSocketSession != session) {
                 webSocketSession.sendMessage(new TextMessage(returnMessage));
             }
         }
@@ -56,7 +66,12 @@ public class WebSocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws InterruptedException, IOException {
         // read the username
-        String username = session.getHandshakeHeaders().getFirst("Username");
+        String username = session.getHandshakeHeaders().getFirst("username");
+        if (username == null) {
+            username = Objects.requireNonNull(
+                    session.getUri()
+            ).getQuery().split("username=")[1];
+        }
 
         logger.info(username + " entered the chat @ " + TimeStampHandler.getCurrentTimestamp());
 
@@ -79,7 +94,13 @@ public class WebSocketHandler extends TextWebSocketHandler {
             throws IOException {
 
         // Get username
-        String username = session.getHandshakeHeaders().getFirst("Username");
+        String username = session.getHandshakeHeaders().getFirst("username");
+        if (username == null) {
+            username = Objects.requireNonNull(
+                    session.getUri()
+            ).getQuery().split("username=")[1];
+        }
+
         logger.info(username + " hast left the chat @ " + TimeStampHandler.getCurrentTimestamp());
 
         String quitMessage = username + " hat den Chat verlassen.";
@@ -94,6 +115,5 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
         // Remove session from session list
         sessions.remove(session);
-
     }
 }

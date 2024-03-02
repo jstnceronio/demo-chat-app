@@ -18,7 +18,6 @@ public class MessageService {
     }
 
     public Message saveMessage(Message message) {
-        // Here, you can add any business logic before saving the message
         return messageRepository.save(message);
     }
 

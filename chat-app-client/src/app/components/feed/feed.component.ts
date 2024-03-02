@@ -1,46 +1,43 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import { Message } from '../../model/message';
 import { ChatService } from '../../service/chat.service';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
+import {FormsModule} from "@angular/forms";
 
 @Component({
   selector: 'app-feed',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, HttpClientModule],
+  imports: [CommonModule, RouterOutlet, HttpClientModule, FormsModule],
   templateUrl: './feed.component.html',
   styleUrl: './feed.component.scss'
 })
-export class FeedComponent implements OnInit {
-  messages: Message[] = [
-    {
-      id: 0,
-      content: "Hi", 
-      sender: "Aaron"
-    },
-    {
-      id: 1,
-      content: "Hey, how's it going?", 
-      sender: "Lukas"
-    }
-  ];
+export class FeedComponent implements OnInit, OnDestroy {
+  messages: any[] = [];
+  messageContent: string = '';
+  username: string = 'User' + Math.floor(Math.random() * 1000);
 
-  constructor(private chatService: ChatService) {}
+  constructor(private webSocketService: ChatService) {}
 
-  ngOnInit() {
-    this.loadMessages();
+  ngOnInit(): void {
+    this.connect();
   }
 
-  loadMessages() {
-    this.chatService.getMessages().subscribe(data => {
-      this.messages = data;
-    }, error => console.error(error));
+  ngOnDestroy(): void {
+    this.webSocketService.close();
   }
 
-  onSendMessage(newMessage: string) {
-    this.chatService.sendMessage({ content: newMessage }).subscribe(() => {
-      this.loadMessages(); // Reload messages after sending
+  connect(): void {
+    this.webSocketService.connect('ws://localhost:8080/websocket', this.username);
+    this.webSocketService.messages.subscribe((message) => {
+      console.log(message)
+      this.messages.push(message);
     });
+  }
+
+  sendMessage(): void {
+    this.webSocketService.sendMessage(this.messageContent);
+    this.messageContent = '';
   }
 }
