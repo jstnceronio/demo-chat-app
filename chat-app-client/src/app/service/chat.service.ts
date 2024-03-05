@@ -11,7 +11,6 @@ export class ChatService {
   private messageSubject = new Subject<any>();
   public messages: Observable<any> = this.messageSubject.asObservable();
 
-
   constructor() {}
 
   public connect(url: string, username: string): void {

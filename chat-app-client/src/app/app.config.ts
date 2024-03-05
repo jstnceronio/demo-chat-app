@@ -5,11 +5,13 @@ import { provideHttpClient } from '@angular/common/http';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import {provideClientHydration} from "@angular/platform-browser";
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideHttpClient(),
+    /*
     importProvidersFrom(
       provideFirebaseApp(() => initializeApp(
         {
@@ -17,10 +19,10 @@ export const appConfig: ApplicationConfig = {
           "storageBucket":"idm-chat-2a40d.appspot.com",
           "apiKey":"AIzaSyDypWY7t84RtGId5XwxNIoskEIWhR6Fykc",
           "authDomain":"idm-chat-2a40d.firebaseapp.com",
-          "messagingSenderId":"437636505420"}
-      ))),
-    importProvidersFrom(
-      provideAuth(() => getAuth())
-    ),
-    importProvidersFrom(provideFirestore(() => getFirestore()))]
+          "messagingSenderId":"437636505420"})
+      ),
+      provideAuth(() => getAuth()),
+      provideFirestore(() => getFirestore())
+    ),*/
+  ]
 };
