@@ -2,9 +2,6 @@ FROM ubuntu:latest AS build
 
 RUN apt-get update
 RUN apt-get install openjdk-17-jdk -y
-
-WORKDIR /chat-app
-
 COPY chat-app .
 
 RUN mvn clean package -Pprod -DskipTests
