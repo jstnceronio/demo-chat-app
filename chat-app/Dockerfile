@@ -6,7 +6,7 @@ RUN apt-get update && \
     apt-get install -y openjdk-17-jdk maven
 
 # Use Maven to package the application
-RUN mvn clean package -Pprod -DskipTests
+RUN mvn clean package -DskipTests
 
 # Use openjdk:17-jdk-slim for the runtime image
 FROM openjdk:17-jdk-slim
