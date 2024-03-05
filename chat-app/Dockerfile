@@ -1,13 +1,18 @@
 # Use ubuntu:latest as the build image
 FROM ubuntu:latest AS build
 
-# Install OpenJDK-17
+# Install OpenJDK-17 and Maven
 RUN apt-get update && \
     apt-get install -y openjdk-17-jdk maven
 
-WORKDIR /chat-app
+# Set the working directory in the build image. Not strictly necessary now, but good practice.
+WORKDIR /build
 
-# Use Maven to package the application
+# Copy your project files into the build container. Since there's no subfolder, copy everything from the current directory.
+# The context of the build is the root of your repository, so the '.' here refers to that root.
+COPY . /build/
+
+# Use Maven to package the application. This command now works directly because pom.xml is in the current directory.
 RUN mvn clean package -DskipTests
 
 # Use openjdk:17-jdk-slim for the runtime image
@@ -16,8 +21,9 @@ FROM openjdk:17-jdk-slim
 # Expose port 8080
 EXPOSE 8080
 
-# Copy the JAR file from the build stage to the /app directory of the runtime container
-COPY --from=build /app/target/chat-app-0.0.1-SNAPSHOT.jar chat-app.jar
+# Copy the JAR file from the build stage to the runtime container
+# Adjust the JAR file name as necessary to match your project's output.
+COPY --from=build /build/target/*.jar /app.jar
 
 # Execute the application
-ENTRYPOINT ["java", "-jar", "chat-app.jar"]
+ENTRYPOINT ["java", "-jar", "/app.jar"]
