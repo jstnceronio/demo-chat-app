@@ -5,6 +5,8 @@ FROM ubuntu:latest AS build
 RUN apt-get update && \
     apt-get install -y openjdk-17-jdk maven
 
+WORKDIR /chat-app
+
 # Use Maven to package the application
 RUN mvn clean package -DskipTests
 
