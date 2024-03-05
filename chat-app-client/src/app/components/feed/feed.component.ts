@@ -29,9 +29,9 @@ export class FeedComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.webSocketService.close();
   }
-
+  // ws://localhost:8080/websocket
   connect(): void {
-    this.webSocketService.connect('ws://localhost:8080/websocket', this.username);
+    this.webSocketService.connect('ws://demo-chat-app-ch5j.onrender.com/websocket', this.username);
     this.webSocketService.messages.subscribe((message) => {
       this.messages.push(message);
     });
