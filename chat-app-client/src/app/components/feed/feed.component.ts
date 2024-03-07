@@ -18,6 +18,7 @@ export class FeedComponent implements OnInit, OnDestroy {
   messages: any[] = [];
   messageContent: string = '';
   username: string = 'User' + Math.floor(Math.random() * 1000);
+  lastMessage: number = 0;
 
   constructor(private webSocketService: ChatService, private authService: AuthService) {}
 
@@ -40,8 +41,15 @@ export class FeedComponent implements OnInit, OnDestroy {
   }
 
   sendMessage(): void {
+    if( (Date.now() - this.lastMessage) > 2000){
+      this.messageContent = this.messageContent.substring(0, 200)
+      this.webSocketService.sendMessage(this.messageContent);
+      this.messageContent = '';
+      this.lastMessage = Date.now()
+    }
+  }
+
+  restrictInput(): void {
     this.messageContent = this.messageContent.substring(0, 200)
-    this.webSocketService.sendMessage(this.messageContent);
-    this.messageContent = '';
   }
 }
