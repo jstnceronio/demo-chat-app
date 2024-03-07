@@ -17,7 +17,7 @@ import {AuthService} from "../../service/auth.service";
 export class FeedComponent implements OnInit, OnDestroy {
   messages: any[] = [];
   messageContent: string = '';
-  colors: string[] = ['fee2e2', 'fef3c7', '3357FF', 'ecfccb', 'ccfbf1', 'e0e7ff', 'f3e8ff', 'fce7f3'];
+  colors: string[] = ['fee2e2', 'fef3c7', 'dcfce7', 'ecfccb', 'ccfbf1', 'e0e7ff', 'f3e8ff', 'fce7f3'];
   color: string = '';
 
   username: string = 'User' + Math.floor(Math.random() * 1000);

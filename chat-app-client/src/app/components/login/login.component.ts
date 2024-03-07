@@ -24,7 +24,7 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {}
 
   enterChat() {
-    if (this.username && this.username.trim().length >= 2) {
+    if (this.username && this.username.trim().length >= 2 && this.username.trim() != 'System') {
       this.auth.username = this.username;
       this.router.navigate(['/feed'])
     }
