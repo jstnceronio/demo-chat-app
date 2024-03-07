@@ -48,11 +48,13 @@ export class FeedComponent implements OnInit, OnDestroy {
   }
 
   sendMessage(): void {
-    if( (Date.now() - this.lastMessage) > 2000){
-      this.messageContent = this.messageContent.substring(0, 200)
-      this.webSocketService.sendMessage(this.messageContent);
-      this.messageContent = '';
-      this.lastMessage = Date.now()
+    if((Date.now() - this.lastMessage) > 2000){
+      if (!(this.messageContent.trim().length == 0)) {
+        this.messageContent = this.messageContent.substring(0, 200)
+        this.webSocketService.sendMessage(this.messageContent);
+        this.messageContent = '';
+        this.lastMessage = Date.now()
+      }
     }
   }
 
@@ -62,9 +64,5 @@ export class FeedComponent implements OnInit, OnDestroy {
 
     // Return the color at the randomly selected index
     return this.colors[randomIndex];
-  }
-
-  restrictInput(): void {
-    this.messageContent = this.messageContent.substring(0, 200)
   }
 }

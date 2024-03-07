@@ -1,7 +1,15 @@
 
 <div class="field-wrapper">
   <label for="username" class="block mb-2 text-sm font-medium text-gray-900">Wie möchtest du dich nennen?</label>
-  <input class="enter-username" [(ngModel)]="username" id="username" type="text" (keyup.enter)="enterChat()" placeholder="Benutzername...">
+  <input class="enter-username" #usernameModel="ngModel"
+         [(ngModel)]="username" (keyup.enter)="enterChat()"
+         id="username" type="text" placeholder="Benutzername..." [minlength]="2"
+  >
+  <div *ngIf="usernameModel.errors && (usernameModel.dirty || usernameModel.touched)" class="text-red-500 mt-4">
+    <div *ngIf="usernameModel.errors">
+      Dein Benutzername sollte länger als 2 Zeichen sein :)
+    </div>
+  </div>
 </div>
 
 <!--
