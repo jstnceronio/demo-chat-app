@@ -109,7 +109,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
         if (username == null) {
             username = Objects.requireNonNull(
                     session.getUri()
-            ).getQuery().split("username=")[1];
+            ).getQuery().split("username=")[1].split("\\?")[0];
         }
 
         logger.info(username + " hast left the chat @ " + TimeStampHandler.getCurrentTimestamp());
