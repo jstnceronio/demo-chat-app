@@ -1,22 +1,24 @@
 <div class="feed-wrapper">
-  <div class="input-wrapper w-64 mt-8">
-    <input class="enter-msg" [(ngModel)]="messageContent" type="text" (keyup.enter)="sendMessage()" placeholder="Send message...">
-  </div>
-
-    <div class="message-feed mt-8">
-        <div *ngFor="let msg of messages">
-            <div class="message">
-                <div class="msg-sender">
-                    {{ msg.username }}
-                </div>
-                <div class="msg-content">
-                    {{ msg.message }}
-                </div>
-            </div>
-        </div>
-        <div *ngIf="messages.length === 0">
-              No messages found
-        </div>
+  <div class="wrapper">
+    <div class="input-wrapper">
+      <input class="enter-msg" [(ngModel)]="messageContent" type="text" (keyup.enter)="sendMessage()" placeholder="Send message...">
     </div>
+
+    <div class="message-feed">
+      <div *ngFor="let msg of messages">
+        <div class="message">
+          <div class="msg-sender">
+            {{ msg.username }}
+          </div>
+          <div class="msg-content">
+            {{ msg.message }}
+          </div>
+        </div>
+      </div>
+      <div *ngIf="messages.length === 0">
+        No messages found
+      </div>
+    </div>
+  </div>
 </div>
 

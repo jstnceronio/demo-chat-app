@@ -22,14 +22,17 @@ export class FeedComponent implements OnInit, OnDestroy {
   constructor(private webSocketService: ChatService, private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.username = this.authService.username;
+    let customName = this.authService.username;
+    if (customName) {
+      this.username = customName;
+    }
     this.connect();
   }
 
   ngOnDestroy(): void {
     this.webSocketService.close();
   }
-  // ws://localhost:8080/websocket
+  // ws://localhost:8080/websocket, wss://demo-chat-app-ch5j.onrender.com/websocket
   connect(): void {
     this.webSocketService.connect('wss://demo-chat-app-ch5j.onrender.com/websocket', this.username);
     this.webSocketService.messages.subscribe((message) => {
