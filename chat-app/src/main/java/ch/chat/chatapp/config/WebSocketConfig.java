@@ -19,7 +19,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry
                 .addHandler(myHandler(), "/websocket")
-                .setAllowedOrigins("https://demo-chat-app-client.onrender.com");
+                .setAllowedOrigins("http://localhost:4200");
     }
 
     public WebSocketHandler myHandler() {
