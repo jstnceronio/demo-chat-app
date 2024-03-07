@@ -38,23 +38,30 @@ public class WebSocketHandler extends TextWebSocketHandler {
         Message newMessage = new Message();
         String username = session.getHandshakeHeaders().getFirst("username");
         if (username == null) {
-             username = Objects.requireNonNull(
-                     session.getUri()
-             ).getQuery().split("username=")[1];
+            username = Objects.requireNonNull(
+                    session.getUri()
+            ).getQuery().split("username=")[1].split("\\?")[0];
         }
+
+        String color = Objects.requireNonNull(
+                session.getUri()
+        ).getQuery().split("color=")[1];
+
         newMessage.setContent(message
                 .getPayload()
                 .replace("\"", "")
         );
         newMessage.setSender(username);
+        newMessage.setColor(color);
 
         logger.info("Received: " + newMessage.getContent());
 
         messageService.saveMessage(newMessage);
 
-        String returnMessage = String.format("{\"username\":\"%s\", \"message\":\"%s\"}",
+        String returnMessage = String.format("{\"username\":\"%s\", \"message\":\"%s\", \"color\":\"%s\"}",
                 newMessage.getSender(),
-                newMessage.getContent());
+                newMessage.getContent(),
+                newMessage.getColor());
 
         session.sendMessage(new TextMessage(returnMessage));
 
@@ -72,16 +79,18 @@ public class WebSocketHandler extends TextWebSocketHandler {
         if (username == null) {
             username = Objects.requireNonNull(
                     session.getUri()
-            ).getQuery().split("username=")[1];
+            ).getQuery().split("username=")[1].split("\\?")[0];
         }
 
         logger.info(username + " entered the chat @ " + TimeStampHandler.getCurrentTimestamp());
 
         // broadcast
         sessions.add(session);
-
+        String color = Objects.requireNonNull(
+                session.getUri()
+        ).getQuery().split("color=")[1];
         String welcomeMessage = username + " ist jetzt im Chat.";
-        String returnMessage = String.format("{\"username\":\"System\", \"message\":\"%s\"}", welcomeMessage);
+        String returnMessage = String.format("{\"username\":\"System\", \"message\":\"%s\", \"color\":\"%s\"}", welcomeMessage, color);
 
         // Send welcome message to all connected sessions
         for (WebSocketSession webSocketSession : sessions) {
@@ -105,8 +114,12 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
         logger.info(username + " hast left the chat @ " + TimeStampHandler.getCurrentTimestamp());
 
+        String color = Objects.requireNonNull(
+                session.getUri()
+        ).getQuery().split("color=")[1];
+
         String quitMessage = username + " hat den Chat verlassen.";
-        String returnMessage = String.format("{\"username\":\"System\", \"message\":\"%s\"}", quitMessage);
+        String returnMessage = String.format("{\"username\":\"System\", \"message\":\"%s\", \"color\":\"%s\"}", quitMessage, color);
 
         // Send quit message to all connected sessions
         for (WebSocketSession webSocketSession : sessions) {

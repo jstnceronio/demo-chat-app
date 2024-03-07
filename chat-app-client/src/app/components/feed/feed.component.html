@@ -6,7 +6,7 @@
 
     <div class="message-feed">
       <div *ngFor="let msg of messages">
-        <div class="message">
+        <div class="message" [style.background-color]="'#' + msg.color">
           <div class="msg-sender">
             {{ msg.username }}
           </div>

@@ -13,9 +13,9 @@ export class ChatService {
 
   constructor() {}
 
-  public connect(url: string, username: string): void {
+  public connect(url: string, username: string, color: string): void {
     this.webSocket = webSocket({
-      url: `${url}?username=${username}`,
+      url: `${url}?username=${username}?color=${color}`,
       deserializer: msg => msg.data,
     });
 

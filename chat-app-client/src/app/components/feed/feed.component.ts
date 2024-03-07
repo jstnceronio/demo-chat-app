@@ -17,6 +17,9 @@ import {AuthService} from "../../service/auth.service";
 export class FeedComponent implements OnInit, OnDestroy {
   messages: any[] = [];
   messageContent: string = '';
+  colors: string[] = ['fee2e2', 'fef3c7', '3357FF', 'ecfccb', 'ccfbf1', 'e0e7ff', 'f3e8ff', 'fce7f3'];
+  color: string = '';
+
   username: string = 'User' + Math.floor(Math.random() * 1000);
   lastMessage: number = 0;
 
@@ -35,7 +38,8 @@ export class FeedComponent implements OnInit, OnDestroy {
   }
   // ws://localhost:8080/websocket, wss://demo-chat-app-ch5j.onrender.com/websocket
   connect(): void {
-    this.webSocketService.connect('wss://demo-chat-app-ch5j.onrender.com/websocket', this.username)
+    this.color = this.getRandomColor();
+    this.webSocketService.connect('wss://demo-chat-app-ch5j.onrender.com/websocket', this.username, this.color)
     //this.webSocketService.connect('ws://localhost:8080/websocket', this.username);
     this.username = this.username.substring(0, 30)
     this.webSocketService.messages.subscribe((message) => {
@@ -50,6 +54,14 @@ export class FeedComponent implements OnInit, OnDestroy {
       this.messageContent = '';
       this.lastMessage = Date.now()
     }
+  }
+
+   getRandomColor(): string {
+    // Generate a random index based on the length of the colors array
+    const randomIndex: number = Math.floor(Math.random() * this.colors.length);
+
+    // Return the color at the randomly selected index
+    return this.colors[randomIndex];
   }
 
   restrictInput(): void {
