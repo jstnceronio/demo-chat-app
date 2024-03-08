@@ -48,7 +48,7 @@ export class FeedComponent implements OnInit, OnDestroy {
   }
 
   sendMessage(): void {
-    if((Date.now() - this.lastMessage) > 2000){
+    if((Date.now() - this.lastMessage) > 10000){
       if (!(this.messageContent.trim().length == 0)) {
         this.messageContent = this.messageContent.substring(0, 200)
         this.webSocketService.sendMessage(this.messageContent);
