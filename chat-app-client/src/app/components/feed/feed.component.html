@@ -15,8 +15,9 @@
           </div>
         </div>
       </div>
-      <div *ngIf="messages.length === 0">
-        No messages found
+      <div *ngIf="messages.length === 0" class="bg-orange-100 rounded-xl p-4 font-bold flex">
+        <div class="border-t-gray-100 border-4 border-orange-500 rounded-full w-6 h-6 animate-spin"></div>
+        <span class="ml-4">Server ist am laden, hab etwas Geduld :)</span>
       </div>
     </div>
   </div>
