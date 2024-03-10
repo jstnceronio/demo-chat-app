@@ -1,5 +1,4 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import { Message } from '../../model/message';
 import { ChatService } from '../../service/chat.service';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
@@ -48,7 +47,7 @@ export class FeedComponent implements OnInit, OnDestroy {
   }
 
   sendMessage(): void {
-    if((Date.now() - this.lastMessage) > 10000){
+    if((Date.now() - this.lastMessage) > 3000){
       if (!(this.messageContent.trim().length == 0)) {
         this.messageContent = this.messageContent.substring(0, 200)
         this.webSocketService.sendMessage(this.messageContent);
