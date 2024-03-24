@@ -18,7 +18,8 @@
 
       .enter-msg {
         @apply bg-gray-200 appearance-none border-2
-        border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none
+        border-gray-200 rounded w-full md:text-2xl
+        py-2 px-4 md:py-4 md:px-6 text-gray-700 leading-tight focus:outline-none
         focus:bg-white focus:border-purple-500
       }
     }
@@ -31,11 +32,11 @@
         @apply bg-purple-100 py-2 px-4 rounded mt-4;
 
         .msg-content {
-          @apply font-bold;
+          @apply font-bold md:text-2xl;
         }
 
         .msg-sender {
-          @apply text-gray-700 text-sm;
+          @apply text-gray-700 md:text-xl;
         }
       }
     }

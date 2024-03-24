@@ -1,0 +1,7 @@
+.app-wrapper {
+  @apply  p-16 flex justify-center flex-col items-center;
+
+  .header {
+    @apply text-2xl md:text-4xl xl:text-6xl font-bold underline decoration-amber-400 underline-offset-8;
+  }
+}
